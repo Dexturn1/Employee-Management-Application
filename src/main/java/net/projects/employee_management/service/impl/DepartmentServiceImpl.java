@@ -14,15 +14,30 @@ import org.springframework.stereotype.Service;
 public class DepartmentServiceImpl implements DepartmentService {
 
     private DepartmentRepository departmentRepository;
-
     private ModelMapper modelMapper;
-
 
     @Override
     public DepartmentDto addDepartment(DepartmentDto departmentDto) {
         Department department = modelMapper.map(departmentDto, Department.class);
-
         Department savedDepartment = departmentRepository.save(department);
         return  modelMapper.map(savedDepartment,DepartmentDto.class);
     }
+
+    @Override
+    public DepartmentDto getDepartment(Long id) {
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+
+        return modelMapper.map(department,DepartmentDto.class);
+    }
+
+
 }
+
+
+
+
+
+
+
+
