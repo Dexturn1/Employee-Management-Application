@@ -30,4 +30,9 @@ public class Department {
     private List<Employee> employees;
 
 
+    public void addEmployee(Employee employee) {
+        employees.add(employee);
+        employee.setDepartment(this);
+    }
+
 }
