@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/departments")
 @AllArgsConstructor
@@ -28,5 +30,11 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDto> getEmployee(@PathVariable("departmentId") Long departmentId,@PathVariable("employeeId") Long employeeId){
         EmployeeDto employeeDto =  employeeService.getEmployeeById(departmentId, employeeId);
         return new ResponseEntity<>(employeeDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/employees")
+    public ResponseEntity<List<EmployeeDto>> getAllEmployeesById(@PathVariable("id") Long id){
+        List<EmployeeDto> employees =  employeeService.getAllEmployeesByDepartmentId(id);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 }

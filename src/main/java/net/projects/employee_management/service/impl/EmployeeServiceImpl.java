@@ -12,6 +12,9 @@ import net.projects.employee_management.service.EmployeeService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @AllArgsConstructor
@@ -46,6 +49,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         return modelMapper.map(employee,EmployeeDto.class);
-
     }
+
+    @Override
+    public List<EmployeeDto> getAllEmployeesByDepartmentId(Long departmentID) {
+
+        Department department = departmentRepository.findById(departmentID).orElseThrow(()-> new ResourceNotFoundException("There is no Department with department-id:"+ departmentID));
+
+        List<Employee> employees = employeeRepository.findByDepartmentId(departmentID);
+
+        return employees.stream().map( employee -> modelMapper.map(employee, EmployeeDto.class)).collect(Collectors.toList());
+    }
+
+
 }
