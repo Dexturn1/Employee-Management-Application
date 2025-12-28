@@ -23,4 +23,10 @@ public class EmployeeController {
         EmployeeDto savedEmployee = employeeService.addEmployee(id, employeeDto);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }
+
+    @GetMapping("/{departmentId}/employees/{employeeId}")
+    public ResponseEntity<EmployeeDto> getEmployee(@PathVariable("departmentId") Long departmentId,@PathVariable("employeeId") Long employeeId){
+        EmployeeDto employeeDto =  employeeService.getEmployeeById(departmentId, employeeId);
+        return new ResponseEntity<>(employeeDto, HttpStatus.OK);
+    }
 }

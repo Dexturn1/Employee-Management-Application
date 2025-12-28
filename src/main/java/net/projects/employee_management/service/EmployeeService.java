@@ -6,4 +6,6 @@ import net.projects.employee_management.dto.EmployeeDto;
 public interface EmployeeService {
 
     EmployeeDto addEmployee(Long departmentId,  EmployeeDto employeeDto);
- }
+    EmployeeDto getEmployeeById(Long departmentId, Long employeeId);
+
+}
