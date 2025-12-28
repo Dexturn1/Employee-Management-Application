@@ -1,6 +1,6 @@
 package net.projects.employee_management.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,26 +8,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "employees")
 @Getter
 @Setter
-@Table(name = "employees")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
+
     @Id
-    @GeneratedValue (strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "first_name", nullable = false, length = 100)
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "las_name", nullable = false, length = 100)
-    private String LastName;
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
+    @JsonIgnore
     private Department department;
-
 }

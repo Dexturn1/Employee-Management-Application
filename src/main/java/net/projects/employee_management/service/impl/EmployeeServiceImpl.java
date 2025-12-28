@@ -30,8 +30,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDepartment(department);
 
         Employee savedEmployee = employeeRepository.save(employee);
-
-
         return  modelMapper.map(savedEmployee, EmployeeDto.class);
     }
 }

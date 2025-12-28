@@ -4,7 +4,6 @@ package net.projects.employee_management.controller;
 import lombok.AllArgsConstructor;
 import net.projects.employee_management.dto.EmployeeDto;
 import net.projects.employee_management.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,16 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
+    @PostMapping("/{id}/employees")
+    public ResponseEntity<EmployeeDto> addEmployee(
+            @PathVariable Long id,
+            @RequestBody EmployeeDto employeeDto) {
 
-
-    @PostMapping("{id}/employees")
-    public ResponseEntity<EmployeeDto> addEmployee(@PathVariable ("id") Long departmentId, @RequestBody EmployeeDto employeeDto){
-        EmployeeDto savedEmployee = employeeService.addEmployee(departmentId, employeeDto);
+        EmployeeDto savedEmployee = employeeService.addEmployee(id, employeeDto);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }
-
-
 }
