@@ -28,7 +28,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDto addEmployee(Long departmentId, EmployeeDto employeeDto){
 
         Department department =  departmentRepository.findById(departmentId)
-                .orElseThrow(()-> new ResourceNotFoundException("There is no Department with department-id:"+ departmentId));
+                .orElseThrow(()->
+                        new ResourceNotFoundException("There is no Department with department-id:"+ departmentId));
 
         Employee employee =   modelMapper.map(employeeDto, Employee.class);
         employee.setDepartment(department);
@@ -40,25 +41,60 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto getEmployeeById(Long departmentId, Long employeeId) {
         Department department =  departmentRepository.findById(departmentId)
-                .orElseThrow(()-> new ResourceNotFoundException("There is no Department with department-id:"+ departmentId));
+                .orElseThrow(()->
+                        new ResourceNotFoundException
+                                ("There is no Department with department-id:"+ departmentId));
 
-        Employee employee = employeeRepository.findById(employeeId).orElseThrow(()->new ResourceNotFoundException("There is not Employee with id: "+employeeId));
+        Employee employee = employeeRepository
+                .findById(employeeId).orElseThrow(()->
+                        new ResourceNotFoundException
+                                ("There is not Employee with id: "+employeeId));
 
-        if(!employee.getDepartment().getId().equals(department.getId())){
+        if(!employee.getDepartment()
+                .getId()
+                .equals(department.getId())){
             throw new BadRequestException("This employee does not belong to department with ID "+ departmentId);
         }
-
-        return modelMapper.map(employee,EmployeeDto.class);
+        return modelMapper
+                .map(employee,EmployeeDto.class);
     }
 
     @Override
     public List<EmployeeDto> getAllEmployeesByDepartmentId(Long departmentID) {
 
-        Department department = departmentRepository.findById(departmentID).orElseThrow(()-> new ResourceNotFoundException("There is no Department with department-id:"+ departmentID));
+        Department department = departmentRepository
+                .findById(departmentID)
+                .orElseThrow(()->
+                        new ResourceNotFoundException("There is no Department with department-id:"+ departmentID));
 
-        List<Employee> employees = employeeRepository.findByDepartmentId(departmentID);
+        List<Employee> employees = employeeRepository
+                .findByDepartmentId(departmentID);
 
-        return employees.stream().map( employee -> modelMapper.map(employee, EmployeeDto.class)).collect(Collectors.toList());
+        return employees.stream()
+                .map( employee -> modelMapper
+                        .map(employee, EmployeeDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public EmployeeDto updateEmployee(Long departmentId, Long employeeId, EmployeeDto employeeDto) {
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(()-> new ResourceNotFoundException("There is no department with ID: "+departmentId));
+
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(()-> new ResourceNotFoundException("There is no employee with Id:"+ employeeId));
+
+        if(!employee.getDepartment().getId().equals(department.getId())){
+            throw new BadRequestException("This employee does not belong to department with ID "+ departmentId);
+
+        }
+        employee.setFirstName(employeeDto.getFirstName());
+        employee.setLastName(employeeDto.getLastName());
+        employee.setEmail(employeeDto.getEmail());
+
+        Employee updatedEmployee  = employeeRepository.save(employee);
+
+        return modelMapper.map(updatedEmployee, EmployeeDto.class);
+
     }
 
 
